@@ -117,6 +117,13 @@ const CartMenu = () => {
                             </Box>
                         ))}
                     </Box>
+                    {/* ACTIONS */}
+                    <Box m="20px 0">
+                        <FlexBox m="20px 0">
+                            <Typography></Typography>
+                            <Typography></Typography>
+                        </FlexBox>
+                    </Box>
                 </Box>
             </Box>
         </Box>
