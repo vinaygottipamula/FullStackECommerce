@@ -21,7 +21,7 @@ const FlexBox = styled(Box)`
 `;
 
 const CartMenu = () => {
-    const navigate = userNavigate();
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const cart = useSelector((state) => state.cart.cart);
     const isCartOpen = useSelector((state) => state.cart.isCartOpen);
@@ -58,8 +58,8 @@ const CartMenu = () => {
                     {/* header */}
                     <FlexBox mb="15px">
                         <Typography variant='h3'>SHOPPING BAG({cart.length})</Typography>
-                        <IconButton onClick={()=>dispatch(setIsCartOpen({}))}>
-                            <CloseIcon/>
+                        <IconButton onClick={() => dispatch(setIsCartOpen({}))}>
+                            <CloseIcon />
                         </IconButton>
                     </FlexBox>
                     {/* CART LIST */}
@@ -81,8 +81,8 @@ const CartMenu = () => {
                                             <Typography fontWeight="bold">
                                                 {item.attributes.name}
                                             </Typography>
-                                            <IconButton onClick={()=>dispatch(removeFromCart({id:item.id}))}>
-                                                <CloseIcon/>
+                                            <IconButton onClick={() => dispatch(removeFromCart({ id: item.id }))}>
+                                                <CloseIcon />
                                             </IconButton>
                                         </FlexBox>
                                         <Typography>{item.attributes.shortDescription}</Typography>
@@ -105,24 +105,38 @@ const CartMenu = () => {
                                                     <AddIcon />
                                                 </IconButton>
                                             </Box>
+                                            {/* PRICE of the ITEM */}
+
+                                            <Typography fontWeight="bold">
+                                                ${item.attributes.price}
+                                            </Typography>
                                         </FlexBox>
-                                        {/* PRICE of the ITEM */}
-                                        
-                                        <Typography fontWeight="bold">
-                                            ${item.attributes.price}
-                                        </Typography>
                                     </Box>
                                 </FlexBox>
-                                <Divider/>
+                                <Divider />
                             </Box>
                         ))}
                     </Box>
                     {/* ACTIONS */}
                     <Box m="20px 0">
                         <FlexBox m="20px 0">
-                            <Typography></Typography>
-                            <Typography></Typography>
+                            <Typography fontWeight="bold">SUBTOTAL</Typography>
+                            <Typography fontWeight="bold">totalPrice</Typography>
                         </FlexBox>
+                        <Button
+                            sx={{
+                                backgroundColor: shades.primary[400],
+                                color: "white",
+                                borderRadius: 0,
+                                minWidth: "10",
+                                padding: "20px 40px",
+                                m: "20px 0",
+                            }}
+                            onClick={() => {
+                                navigate("/checkout");
+                                dispatch(setIsCartOpen({}));
+                            }}
+                        >CHECKOUT</Button>
                     </Box>
                 </Box>
             </Box>

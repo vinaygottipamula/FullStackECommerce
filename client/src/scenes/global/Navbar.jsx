@@ -4,7 +4,6 @@ import {
     PersonOutline,
     ShoppingBagOutlined,
     MenuOutlined,
-    SeachOutlined,
     SearchOutlined
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
