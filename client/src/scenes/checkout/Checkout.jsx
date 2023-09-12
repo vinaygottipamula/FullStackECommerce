@@ -6,6 +6,11 @@ import * as yup from 'yup';
 import Shipping from "./Shipping";
 import { shades } from '../../theme';
 import Payment from "./Payment"
+import { loadStripe } from '@stripe/stripe-js';
+
+const stripePromise = loadStripe(
+    "pk_test_51NpEvCSEE987WJ4xjYOcClGsMMyqkwCiqoWMELunP3XTPrB4b3kXdtpYAcCWn8PAmRk9HWRdI54goGaOKTMTrxW900JQXo7CUe"
+);
 
 const initialValues = {
     billingAddress: {
@@ -104,10 +109,28 @@ const Checkout = () => {
         actions.setTouched({});
     };
     async function makePayment(values) {
-        
+        const stripe = await stripePromise;
+        const requestBody = {
+            userName: [values.firstName, values.lastName].join(" "),
+            email: values.email,
+            products: cart.map(({ id, count }) => ({
+                id,
+                count,
+            })),
+        };
+        const response = await fetch("http://localhost:1337/api/orders", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(requestBody)
+        });
+        const session = await response.json();
+        await stripe.redirectToCheckout({
+            sessionId: session.id
+        });
     }
     
-    return <Box width="80%" m="100% auto">
+    return (
+        <Box width="80%" m="100% auto">
         <Stepper activeStep={{activeStep}} sx={{m:"20px 0"}}>
             <Step>
                 <StepLabel> Billing</StepLabel>
@@ -180,7 +203,6 @@ const Checkout = () => {
                                         borderRadius: 0,
                                         padding:"15px 40px"
                                     }}
-                                    onClick={()=>setActiveStep(activeStep-1)}
                                 >{isFirstStep?"Next":"Place Order"
                             }</Button>
                         </Box>
@@ -188,7 +210,8 @@ const Checkout = () => {
                 )}
             </Formik>
         </Box>
-    </Box>;
+    </Box>
+    );
 };
 
 export default Checkout;
